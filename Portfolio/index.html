@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALEX.SEC | Offensive Security Researcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+        }
+        .font-mono { 
+            font-family: 'JetBrains Mono', monospace; 
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-400 antialiased selection:bg-emerald-500/20 selection:text-emerald-300 relative min-h-screen flex flex-col">
+
+    <!-- Subtle Background Glow -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[400px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full border-b border-white/[0.05] bg-zinc-950/80 backdrop-blur-xl z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="text-zinc-100 text-lg font-medium tracking-tighter">THEREDHAWK.SEC</div>
+            
+            <nav class="hidden md:flex items-center gap-8 text-sm">
+                <a href="#expertise" class="text-zinc-400 hover:text-zinc-100 transition-colors">Expertise</a>
+                <a href="#advisories" class="text-zinc-400 hover:text-zinc-100 transition-colors">Advisories</a>
+                <a href="#research" class="text-zinc-400 hover:text-zinc-100 transition-colors">Research</a>
+            </nav>
+
+            <div class="flex items-center gap-6">
+                <!-- Custom Functional Toggle -->
+                <div class="hidden sm:flex items-center gap-3">
+                    <span class="text-xs font-medium text-zinc-500">Stealth</span>
+                    <div class="relative inline-block w-8 h-4 align-middle select-none transition duration-200 ease-in">
+                        <input type="checkbox" name="stealth-toggle" id="stealth-toggle" class="peer absolute block w-3 h-3 rounded-full bg-zinc-400 appearance-none cursor-pointer transition-all duration-300 z-10 top-0.5 left-0.5 checked:translate-x-4 checked:bg-emerald-400"/>
+                        <label for="stealth-toggle" class="block overflow-hidden h-4 rounded-full bg-zinc-800 border border-white/10 cursor-pointer transition-colors duration-300 peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500/30"></label>
+                    </div>
+                </div>
+                
+                <button class="bg-zinc-100 text-zinc-950 px-4 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors">
+                    Initiate Contact
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 pt-32 pb-24 px-6 max-w-6xl mx-auto w-full relative z-10">
+        
+        <!-- Hero Section -->
+        <section class="max-w-3xl flex flex-col items-start pt-12 md:pt-20">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.08] mb-8">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs text-zinc-300 font-medium">Clearance: TS/SCI Active</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-semibold text-transparent bg-clip-text bg-gradient-to-b from-zinc-100 to-zinc-500 tracking-tight leading-tight mb-6">
+                Securing the <br/><span class="text-zinc-600">digital frontier.</span>
+            </h1>
+            
+            <p class="text-lg text-zinc-400 mb-10 max-w-xl leading-relaxed font-light">
+                Offensive security researcher and penetration tester specializing in web applications, cloud infrastructure, and zero-day vulnerability discovery.
+            </p>
+            
+            <div class="flex flex-wrap items-center gap-4">
+                <button class="bg-zinc-100 text-zinc-950 px-5 py-2.5 rounded-md text-sm font-medium hover:bg-white transition-colors inline-flex items-center gap-2">
+                    View Engagements
+                    <iconify-icon icon="solar:arrow-right-up-linear" class="text-base"></iconify-icon>
+                </button>
+                <button class="bg-transparent text-zinc-300 border border-white/10 px-5 py-2.5 rounded-md text-sm font-medium hover:bg-white/[0.03] transition-colors inline-flex items-center gap-2">
+                    <iconify-icon icon="solar:document-text-linear" class="text-base"></iconify-icon>
+                    Download PGP
+                </button>
+            </div>
+        </section>
+
+        <!-- Bento Grid / Expertise -->
+        <section id="expertise" class="mt-32 grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <!-- Terminal/Code Block (Spans 2 columns) -->
+            <div class="md:col-span-2 rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 flex flex-col relative overflow-hidden group hover:border-white/[0.15] transition-colors">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div class="flex items-center gap-3 mb-6 relative z-10">
+                    <iconify-icon icon="solar:code-square-linear" class="text-xl text-zinc-300"></iconify-icon>
+                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight">Vulnerability Research</h2>
+                </div>
+                
+                <div class="flex-1 rounded-lg bg-zinc-950/80 border border-white/[0.05] p-5 font-mono text-xs leading-loose flex flex-col relative z-10 shadow-inner">
+                    <div class="flex gap-2 mb-5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
+                        <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
+                    </div>
+                    <div class="text-zinc-500">> ./run_exploit.sh --target prod --stealth</div>
+                    <div class="text-zinc-400">[*] Initializing payload vectors...</div>
+                    <div class="text-zinc-400">[*] Bypassing WAF ruleset via request smuggling...</div>
+                    <div class="text-emerald-400 mt-2">[+] Access granted. Reverse shell spawned.</div>
+                    <div class="text-zinc-500 mt-auto pt-6 flex items-center gap-2">
+                        root@target:~# <span class="animate-pulse w-1.5 h-3 bg-zinc-400 inline-block"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certifications -->
+            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 flex flex-col group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors">
+                <div class="flex items-center gap-3 mb-6">
+                    <iconify-icon icon="solar:diploma-verified-linear" class="text-xl text-zinc-300"></iconify-icon>
+                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight">Certifications</h2>
+                </div>
+                <ul class="space-y-4 text-sm mt-auto font-light">
+                    <li class="flex justify-between items-center border-b border-white/[0.05] pb-3">
+                        <span class="text-zinc-300">OSCP</span>
+                        <span class="text-zinc-500 text-xs">OffSec</span>
+                    </li>
+                    <li class="flex justify-between items-center border-b border-white/[0.05] pb-3">
+                        <span class="text-zinc-300">OSWE</span>
+                        <span class="text-zinc-500 text-xs">OffSec</span>
+                    </li>
+                    <li class="flex justify-between items-center border-b border-white/[0.05] pb-3">
+                        <span class="text-zinc-300">CISSP</span>
+                        <span class="text-zinc-500 text-xs">ISC²</span>
+                    </li>
+                    <li class="flex justify-between items-center pb-1">
+                        <span class="text-zinc-300">CISM</span>
+                        <span class="text-zinc-500 text-xs">ISACA</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Threat Modeling -->
+            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-full bg-white/[0.03] flex items-center justify-center mb-6 border border-white/[0.05]">
+                        <iconify-icon icon="solar:shield-warning-linear" class="text-xl text-zinc-300"></iconify-icon>
+                    </div>
+                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight mb-3">Threat Modeling</h2>
+                    <p class="text-sm text-zinc-400 leading-relaxed font-light">
+                        Architecting secure systems by identifying vulnerabilities during the design phase using STRIDE methodologies.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Red Teaming -->
+            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-full bg-white/[0.03] flex items-center justify-center mb-6 border border-white/[0.05]">
+                        <iconify-icon icon="solar:ghost-linear" class="text-xl text-zinc-300"></iconify-icon>
+                    </div>
+                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight mb-3">Red Teaming</h2>
+                    <p class="text-sm text-zinc-400 leading-relaxed font-light">
+                        Full-scope adversarial simulations to test detection and response capabilities against advanced persistent threats.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Custom Interactive Element: Risk Slider -->
+            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 flex flex-col group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <iconify-icon icon="solar:tuning-square-2-linear" class="text-xl text-zinc-300"></iconify-icon>
+                        <h2 class="text-xl font-medium text-zinc-100 tracking-tight">Audit Scope</h2>
+                    </div>
+                    <span class="text-xs font-mono text-emerald-400">Deep</span>
+                </div>
+                
+                <p class="text-sm text-zinc-400 leading-relaxed font-light mb-8">
+                    Adjusting simulation depth constraints for internal penetration testing frameworks.
+                </p>
+
+                <div class="mt-auto relative w-full h-1.5 bg-zinc-800 rounded-full">
+                    <div class="absolute top-0 left-0 h-1.5 bg-emerald-500/80 rounded-full w-[85%]"></div>
+                    <input type="range" min="1" max="100" value="85" class="absolute top-1/2 -translate-y-1/2 w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-zinc-100 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-zinc-900 [&::-webkit-slider-thumb]:shadow-sm"/>
+                </div>
+                <div class="flex justify-between items-center mt-3 text-xs text-zinc-500 font-medium">
+                    <span>Surface</span>
+                    <span>Comprehensive</span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Advisories List -->
+        <section id="advisories" class="mt-32">
+            <h2 class="text-2xl font-medium text-zinc-100 tracking-tight mb-8">Recent Advisories</h2>
+            <div class="flex flex-col border-t border-white/[0.08]">
+                
+                <!-- Item 1 -->
+                <a href="#" class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors -mx-6 px-6">
+                    <div class="flex items-start md:items-center gap-4 md:gap-8 mb-4 md:mb-0 flex-col md:flex-row">
+                        <span class="text-sm font-mono text-emerald-400 w-32">CVE-2023-8472</span>
+                        <div>
+                            <h3 class="text-base text-zinc-200 font-medium mb-1 group-hover:text-zinc-100 transition-colors">Auth Bypass in Enterprise Gateway</h3>
+                            <p class="text-sm text-zinc-500 font-light">Unauthenticated RCE via SAML assertion manipulation.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <span class="text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-medium">Critical</span>
+                        <iconify-icon icon="solar:arrow-right-linear" class="text-zinc-600 group-hover:text-zinc-300 transition-colors text-lg"></iconify-icon>
+                    </div>
+                </a>
+
+                <!-- Item 2 -->
+                <a href="#" class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors -mx-6 px-6">
+                    <div class="flex items-start md:items-center gap-4 md:gap-8 mb-4 md:mb-0 flex-col md:flex-row">
+                        <span class="text-sm font-mono text-emerald-400 w-32">CVE-2023-4109</span>
+                        <div>
+                            <h3 class="text-base text-zinc-200 font-medium mb-1 group-hover:text-zinc-100 transition-colors">Privilege Escalation in CloudAgent</h3>
+                            <p class="text-sm text-zinc-500 font-light">Local privilege escalation via insecure named pipe configuration.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <span class="text-xs px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 font-medium">High</span>
+                        <iconify-icon icon="solar:arrow-right-linear" class="text-zinc-600 group-hover:text-zinc-300 transition-colors text-lg"></iconify-icon>
+                    </div>
+                </a>
+
+                <!-- Item 3 -->
+                <a href="#" class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors -mx-6 px-6">
+                    <div class="flex items-start md:items-center gap-4 md:gap-8 mb-4 md:mb-0 flex-col md:flex-row">
+                        <span class="text-sm font-mono text-emerald-400 w-32">CVE-2022-1984</span>
+                        <div>
+                            <h3 class="text-base text-zinc-200 font-medium mb-1 group-hover:text-zinc-100 transition-colors">SSRF in Analytics Engine</h3>
+                            <p class="text-sm text-zinc-500 font-light">Server-Side Request Forgery allowing internal network pivoting.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <span class="text-xs px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 font-medium">Medium</span>
+                        <iconify-icon icon="solar:arrow-right-linear" class="text-zinc-600 group-hover:text-zinc-300 transition-colors text-lg"></iconify-icon>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-32 border-t border-white/[0.08] pt-8 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
+            
+            <div class="flex items-center gap-4">
+                <div class="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/[0.08]">
+                    <iconify-icon icon="solar:shield-keyhole-linear" class="text-sm text-zinc-400"></iconify-icon>
+                </div>
+                <div class="text-xs text-zinc-500 font-medium">
+                    &copy; 2024 ALEX.SEC. All systems nominal.
+                </div>
+            </div>
+
+            <!-- Custom Dropdown -->
+            <div class="relative group">
+                <button class="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">
+                    <iconify-icon icon="solar:global-linear" class="text-sm"></iconify-icon>
+                    Region: Global (EN)
+                    <iconify-icon icon="solar:alt-arrow-down-linear" class="text-sm"></iconify-icon>
+                </button>
+                <div class="absolute bottom-full mb-2 right-0 w-36 bg-zinc-900/90 backdrop-blur-md border border-white/10 rounded-lg p-1.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl">
+                    <a href="#" class="block px-3 py-2 text-xs text-zinc-300 bg-white/5 rounded-md transition-colors font-medium">Global (EN)</a>
+                    <a href="#" class="block px-3 py-2 text-xs text-zinc-500 hover:text-zinc-300 hover:bg-white/5 rounded-md transition-colors font-medium">Europe (EN)</a>
+                    <a href="#" class="block px-3 py-2 text-xs text-zinc-500 hover:text-zinc-300 hover:bg-white/5 rounded-md transition-colors font-medium">APAC (EN)</a>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <a href="#" aria-label="Github Profile" class="text-zinc-500 hover:text-zinc-100 transition-colors">
+                    <iconify-icon icon="solar:programming-linear" class="text-xl"></iconify-icon>
+                </a>
+                <a href="#" aria-label="Contact Email" class="text-zinc-500 hover:text-zinc-100 transition-colors">
+                    <iconify-icon icon="solar:letter-linear" class="text-xl"></iconify-icon>
+                </a>
+            </div>
+        </footer>
+
+    </main>
+</body>
+</html>
