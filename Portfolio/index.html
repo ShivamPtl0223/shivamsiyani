@@ -1,281 +1,2137 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE_REDHAWK | Offensive Security Researcher</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-        }
-        .font-mono { 
-            font-family: 'JetBrains Mono', monospace; 
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shivam Siyani | Cybersecurity Analyst</title>
+<meta name="description" content="Cybersecurity Analyst & Network Security Enthusiast - SOC Dashboard Portfolio">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-green: #00ff41;
+  --neon-cyan: #00f5ff;
+  --neon-red: #ff0040;
+  --neon-orange: #ff6600;
+  --dark-bg: #020b08;
+  --dark-panel: #040f0a;
+  --dark-border: #0a2a1a;
+  --mid-green: #00aa2a;
+  --dim-green: #003311;
+  --text-primary: #b0ffc0;
+  --text-secondary: #4daa66;
+  --text-dim: #1a5530;
+  --glass-bg: rgba(0,255,65,0.03);
+  --glass-border: rgba(0,255,65,0.15);
+  --panel-bg: rgba(0,20,10,0.8);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body {
+  background: var(--dark-bg);
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:#010804;}
+::-webkit-scrollbar-thumb{background:var(--neon-green);border-radius:2px;}
+
+/* LOADING SCREEN */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+#loader-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.2rem,4vw,2rem);
+  font-weight: 900;
+  color: var(--neon-green);
+  text-shadow: 0 0 30px var(--neon-green);
+  letter-spacing: 4px;
+}
+
+#loader-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--neon-green);
+  min-height: 1.2em;
+}
+
+#loader-bar-wrap {
+  width: min(400px, 80vw);
+  height: 2px;
+  background: #001a08;
+  border: 1px solid var(--dim-green);
+  position: relative;
+  overflow: hidden;
+}
+
+#loader-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+  width: 0%;
+  transition: width 0.1s;
+  box-shadow: 0 0 10px var(--neon-green);
+}
+
+#loader-pct {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+}
+
+/* MATRIX CANVAS */
+#matrix-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+/* SCAN LINE */
+.scanline {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,65,0.4), transparent);
+  z-index: 1;
+  pointer-events: none;
+  animation: scanDown 8s linear infinite;
+}
+
+@keyframes scanDown {
+  0%{top:0;} 100%{top:100vh;}
+}
+
+/* GRID BG */
+.cyber-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,65,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,65,0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 30px;
+  background: rgba(2,11,8,0.95);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+}
+
+.nav-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  color: var(--neon-green);
+  text-shadow: 0 0 15px var(--neon-green);
+  letter-spacing: 3px;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--neon-green);
+  text-shadow: 0 0 10px var(--neon-green);
+}
+
+.nav-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: 0 0 6px var(--neon-green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100%{opacity:1;} 50%{opacity:0.3;}
+}
+
+/* SECTION BASE */
+section {
+  position: relative;
+  z-index: 2;
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 30px 60px;
+  overflow: hidden;
+}
+
+.hero-hud-corner {
+  position: absolute;
+  width: 80px; height: 80px;
+  border-color: var(--neon-green);
+  border-style: solid;
+  opacity: 0.4;
+}
+.hero-hud-corner.tl { top:20px;left:20px; border-width: 2px 0 0 2px; }
+.hero-hud-corner.tr { top:20px;right:20px; border-width: 2px 2px 0 0; }
+.hero-hud-corner.bl { bottom:20px;left:20px; border-width: 0 0 2px 2px; }
+.hero-hud-corner.br { bottom:20px;right:20px; border-width: 0 2px 2px 0; }
+
+.hero-inner {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  color: var(--neon-green);
+  border: 1px solid var(--glass-border);
+  padding: 4px 16px;
+  margin-bottom: 20px;
+  background: var(--glass-bg);
+}
+
+.hero-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(0,255,65,0.3);
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.hero-name span {
+  color: var(--neon-green);
+  text-shadow: 0 0 30px var(--neon-green), 0 0 60px rgba(0,255,65,0.3);
+}
+
+.hero-role {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 4px;
+  margin-bottom: 30px;
+}
+
+/* TERMINAL */
+.terminal-box {
+  background: rgba(0,5,2,0.9);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  padding: 20px;
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto 30px;
+  box-shadow: 0 0 30px rgba(0,255,65,0.1), inset 0 0 30px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.term-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+.term-dot.r{background:#ff5f56;}
+.term-dot.y{background:#ffbd2e;}
+.term-dot.g{background:#27c93f;}
+
+.terminal-title {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  flex: 1;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+#terminal-output {
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: var(--neon-green);
+  min-height: 100px;
+}
+
+.term-line { display: flex; align-items: center; gap: 8px; }
+.term-prompt { color: var(--neon-cyan); }
+.term-cmd { color: var(--text-primary); }
+.term-result { color: var(--text-secondary); padding-left: 16px; }
+.term-cursor {
+  display: inline-block;
+  width: 8px; height: 14px;
+  background: var(--neon-green);
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-cyber {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  padding: 12px 28px;
+  border: 1px solid var(--neon-green);
+  background: transparent;
+  color: var(--neon-green);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+
+.btn-cyber::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--neon-green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s;
+}
+
+.btn-cyber:hover::before { transform: scaleX(1); }
+.btn-cyber:hover { color: #000; }
+.btn-cyber span { position: relative; z-index: 1; }
+
+.btn-cyber.secondary {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+.btn-cyber.secondary::before { background: var(--neon-cyan); }
+
+/* PANELS */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.section-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 700;
+  color: var(--neon-green);
+  text-shadow: 0 0 20px rgba(0,255,65,0.4);
+  letter-spacing: 3px;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--glass-border), transparent);
+}
+
+.section-num {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 30px;
+}
+
+/* ATTACK MAP */
+#attack-map {
+  background: var(--dark-panel);
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.attack-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--neon-green), transparent);
+}
+
+.stat-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  text-shadow: 0 0 20px var(--neon-green);
+  display: block;
+}
+
+.stat-value.red { color: var(--neon-red); text-shadow: 0 0 20px var(--neon-red); }
+.stat-value.cyan { color: var(--neon-cyan); text-shadow: 0 0 20px var(--neon-cyan); }
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.map-wrap {
+  position: relative;
+  background: rgba(0,10,5,0.8);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  overflow: hidden;
+  height: 380px;
+}
+
+#worldMapSvg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ABOUT */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.profile-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-card::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 60px;
+  border-bottom: 1px solid var(--glass-border);
+  border-left: 1px solid var(--glass-border);
+}
+
+.profile-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--neon-green);
+  box-shadow: 0 0 20px rgba(0,255,65,0.3);
+  background: linear-gradient(135deg, #003811, #001a08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--neon-green);
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.profile-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,255,65,0.2);
+  animation: rotateRing 8s linear infinite;
+}
+
+@keyframes rotateRing {
+  0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);}
+}
+
+.profile-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.profile-role {
+  font-size: 0.75rem;
+  color: var(--neon-cyan);
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.profile-info {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 2;
+}
+
+.profile-info span {
+  color: var(--text-primary);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.skill-bar-wrap {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 12px 16px;
+}
+
+.skill-name {
+  font-size: 0.72rem;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.skill-pct {
+  color: var(--neon-green);
+}
+
+.skill-bar-bg {
+  height: 3px;
+  background: var(--dark-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+  box-shadow: 0 0 6px var(--neon-green);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* PROJECTS */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s;
+}
+
+.project-card:hover { border-color: var(--neon-green); box-shadow: 0 0 30px rgba(0,255,65,0.15); }
+.project-card:hover::before { transform: scaleX(1); }
+
+.project-type {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--neon-cyan);
+  margin-bottom: 10px;
+}
+
+.project-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.project-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.tag {
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  border: 1px solid var(--dim-green);
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+.project-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-sm {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border: 1px solid;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-sm.green { border-color: var(--neon-green); color: var(--neon-green); }
+.btn-sm.green:hover { background: var(--neon-green); color: #000; }
+.btn-sm.cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+.btn-sm.cyan:hover { background: var(--neon-cyan); color: #000; }
+
+/* INTERACTIVE TERMINAL */
+.iterm-wrap {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(0,5,2,0.95);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  box-shadow: 0 0 60px rgba(0,255,65,0.1);
+  overflow: hidden;
+}
+
+.iterm-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(0,20,10,0.8);
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.iterm-title {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  flex: 1;
+  text-align: center;
+}
+
+#iterm-output {
+  padding: 20px;
+  min-height: 280px;
+  max-height: 380px;
+  overflow-y: auto;
+  font-size: 0.8rem;
+  line-height: 1.9;
+  color: var(--neon-green);
+}
+
+.iterm-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--dark-border);
+}
+
+.iterm-prompt {
+  color: var(--neon-cyan);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+#iterm-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  caret-color: var(--neon-green);
+}
+
+/* RADAR */
+.radar-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+#radarCanvas {
+  display: block;
+  margin: 0 auto;
+}
+
+.radar-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.radar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.radar-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green);
+  flex-shrink: 0;
+}
+
+.radar-dot.cyan { background: var(--neon-cyan); box-shadow: 0 0 8px var(--neon-cyan); }
+.radar-dot.red { background: var(--neon-red); box-shadow: 0 0 8px var(--neon-red); }
+
+.radar-skill {
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  flex: 1;
+  letter-spacing: 1px;
+}
+
+.radar-pct {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  color: var(--neon-green);
+}
+
+/* SIEM FEED */
+.siem-feed-wrap {
+  background: rgba(0,5,2,0.95);
+  border: 1px solid var(--glass-border);
+  height: 340px;
+  overflow: hidden;
+  position: relative;
+}
+
+.siem-feed-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--dark-border);
+  background: rgba(0,20,10,0.6);
+}
+
+.siem-title {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: var(--text-secondary);
+}
+
+.siem-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: var(--neon-red);
+  letter-spacing: 2px;
+}
+
+#siem-logs {
+  padding: 12px 16px;
+  height: calc(100% - 41px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-line {
+  font-size: 0.72rem;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+  animation: logAppear 0.3s ease;
+}
+
+@keyframes logAppear {
+  from{opacity:0;transform:translateX(-10px);} to{opacity:1;transform:none;}
+}
+
+.log-time { color: var(--text-dim); flex-shrink: 0; }
+.log-level { flex-shrink: 0; font-weight: bold; }
+.log-level.info { color: var(--neon-cyan); }
+.log-level.warn { color: var(--neon-orange); }
+.log-level.alert { color: var(--neon-red); }
+.log-level.crit { color: #ff0000; animation: glitchText 0.5s infinite; }
+.log-msg { color: var(--text-secondary); }
+.log-ip { color: var(--text-dim); margin-left: auto; flex-shrink: 0; }
+
+@keyframes glitchText {
+  0%,100%{opacity:1;} 50%{opacity:0.5;letter-spacing:1px;}
+}
+
+/* CONTACT */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 40px;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.contact-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.contact-item-label {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.contact-item-val {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.cyber-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+}
+
+.form-input, .form-textarea {
+  background: rgba(0,10,5,0.8);
+  border: 1px solid var(--dark-border);
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 10px rgba(0,255,65,0.2);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--glass-border);
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.footer-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s, text-shadow 0.2s;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+}
+
+.footer-link:hover {
+  color: var(--neon-green);
+  text-shadow: 0 0 10px var(--neon-green);
+  border-color: var(--glass-border);
+}
+
+.footer-copy {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+}
+
+/* SCROLL REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* GLITCH */
+.glitch {
+  position: relative;
+}
+
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+
+.glitch::before {
+  color: var(--neon-cyan);
+  animation: glitch1 4s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+
+.glitch::after {
+  color: var(--neon-red);
+  animation: glitch2 4s infinite;
+  clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch1 {
+  0%,95%,100%{transform:none;opacity:0;}
+  96%{transform:translate(-2px,1px);opacity:0.8;}
+  97%{transform:translate(2px,-1px);opacity:0.8;}
+  98%{transform:none;opacity:0;}
+}
+
+@keyframes glitch2 {
+  0%,93%,100%{transform:none;opacity:0;}
+  94%{transform:translate(2px,1px);opacity:0.7;}
+  95%{transform:translate(-2px,-1px);opacity:0.7;}
+  96%{transform:none;opacity:0;}
+}
+
+/* HUD ELEMENTS */
+.hud-panel {
+  position: absolute;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 8px 12px;
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+.hud-panel.top-left { top: 60px; left: 20px; }
+.hud-panel.top-right { top: 60px; right: 20px; text-align: right; }
+
+/* KEYBOARD SHORTCUT HINT */
+#key-hint {
+  position: fixed;
+  bottom: 20px; right: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  padding: 8px 14px;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  z-index: 50;
+  transition: opacity 0.5s;
+}
+
+/* TERMINAL MODAL */
+#term-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,5,2,0.95);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#term-modal.open { display: flex; }
+
+.term-modal-inner {
+  width: min(700px, 95vw);
+  background: rgba(0,5,2,0.99);
+  border: 1px solid var(--neon-green);
+  box-shadow: 0 0 60px rgba(0,255,65,0.3);
+  overflow: hidden;
+}
+
+.term-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(0,30,15,0.8);
+  border-bottom: 1px solid var(--dim-green);
+}
+
+.term-modal-title {
+  font-size: 0.75rem;
+  color: var(--neon-green);
+  letter-spacing: 3px;
+}
+
+#close-term {
+  background: none;
+  border: none;
+  color: var(--neon-red);
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+#modal-output {
+  padding: 20px;
+  height: 300px;
+  overflow-y: auto;
+  font-size: 0.78rem;
+  line-height: 1.9;
+  color: var(--neon-green);
+}
+
+.modal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--dim-green);
+}
+
+#modal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem;
+  caret-color: var(--neon-green);
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .about-grid, .radar-wrap, .contact-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .hero-hud-corner { display: none; }
+}
+
+/* TOOLTIP */
+.attack-tooltip {
+  position: absolute;
+  background: rgba(0,10,5,0.95);
+  border: 1px solid var(--neon-green);
+  padding: 6px 10px;
+  font-size: 0.65rem;
+  color: var(--neon-green);
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Shimmer on load */
+@keyframes shimmer {
+  0%{background-position: -200% center;}
+  100%{background-position: 200% center;}
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg, var(--neon-green) 0%, var(--neon-cyan) 50%, var(--neon-green) 100%);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+</style>
 </head>
-<body class="bg-zinc-950 text-zinc-400 antialiased selection:bg-emerald-500/20 selection:text-emerald-300 relative min-h-screen flex flex-col">
+<body>
 
-    <!-- Subtle Background Glow -->
-    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[400px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <div id="loader-logo">[ CYBER COMMAND CENTER ]</div>
+  <div id="loader-text">Initializing security systems...</div>
+  <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+  <div id="loader-pct">0%</div>
+</div>
 
-    <!-- Navigation -->
-    <header class="fixed top-0 w-full border-b border-white/[0.05] bg-zinc-950/80 backdrop-blur-xl z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="text-zinc-100 text-lg font-medium tracking-tighter">THE_REDHAWK</div>
-            
-            <nav class="hidden md:flex items-center gap-8 text-sm">
-                <a href="#expertise" class="text-zinc-400 hover:text-zinc-100 transition-colors">Expertise</a>
-                <a href="#advisories" class="text-zinc-400 hover:text-zinc-100 transition-colors">Advisories</a>
-                <a href="#research" class="text-zinc-400 hover:text-zinc-100 transition-colors">Research</a>
-            </nav>
+<!-- SCANLINE -->
+<div class="scanline"></div>
 
-            <div class="flex items-center gap-6">
-                <!-- Custom Functional Toggle -->
-                <div class="hidden sm:flex items-center gap-3">
-                    <span class="text-xs font-medium text-zinc-500">Stealth</span>
-                    <div class="relative inline-block w-8 h-4 align-middle select-none transition duration-200 ease-in">
-                        <input type="checkbox" name="stealth-toggle" id="stealth-toggle" class="peer absolute block w-3 h-3 rounded-full bg-zinc-400 appearance-none cursor-pointer transition-all duration-300 z-10 top-0.5 left-0.5 checked:translate-x-4 checked:bg-emerald-400"/>
-                        <label for="stealth-toggle" class="block overflow-hidden h-4 rounded-full bg-zinc-800 border border-white/10 cursor-pointer transition-colors duration-300 peer-checked:bg-emerald-500/20 peer-checked:border-emerald-500/30"></label>
-                    </div>
-                </div>
-                
-                <button class="bg-zinc-100 text-zinc-950 px-4 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors">
-                    Initiate Contact
-                </button>
-            </div>
+<!-- MATRIX CANVAS -->
+<canvas id="matrix-canvas"></canvas>
+
+<!-- KEYBOARD HINT -->
+<div id="key-hint">[ CTRL + ` ] OPEN TERMINAL</div>
+
+<!-- TERMINAL MODAL -->
+<div id="term-modal">
+  <div class="term-modal-inner">
+    <div class="term-modal-head">
+      <div class="term-modal-title">ROOT@SHIVAMAX:~#</div>
+      <button id="close-term" onclick="closeTermModal()">[ X ]</button>
+    </div>
+    <div id="modal-output"></div>
+    <div class="modal-input-row">
+      <span class="iterm-prompt">root@shivamax:~$</span>
+      <input id="modal-input" type="text" autocomplete="off" spellcheck="false" placeholder="type a command..." />
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">SS.CYBER</a>
+  <ul class="nav-links">
+    <li><a href="#hero">HOME</a></li>
+    <li><a href="#attack-map">THREAT MAP</a></li>
+    <li><a href="#about">PROFILE</a></li>
+    <li><a href="#projects">PROJECTS</a></li>
+    <li><a href="#terminal">TERMINAL</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    <span>SYSTEMS ONLINE</span>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <div class="cyber-grid"></div>
+  <div class="hero-hud-corner tl"></div>
+  <div class="hero-hud-corner tr"></div>
+  <div class="hero-hud-corner bl"></div>
+  <div class="hero-hud-corner br"></div>
+
+  <div class="hud-panel top-left">
+    LAT: 23.0225° N<br>LNG: 72.5714° E<br>LOC: AHMEDABAD, IN
+  </div>
+  <div class="hud-panel top-right" id="hud-time">
+    SYS TIME: --:--:--<br>UPTIME: 99.97%<br>STATUS: SECURE
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-tag">// CYBERSECURITY COMMAND CENTER v2.4.1</div>
+    <h1 class="hero-name glitch shimmer-text" data-text="SHIVAM SIYANI">SHIVAM SIYANI</h1>
+    <p class="hero-role">CYBERSECURITY ANALYST &nbsp;|&nbsp; NETWORK SECURITY &nbsp;|&nbsp; THREAT DETECTION</p>
+
+    <div class="terminal-box">
+      <div class="terminal-header">
+        <div class="term-dot r"></div>
+        <div class="term-dot y"></div>
+        <div class="term-dot g"></div>
+        <div class="terminal-title">TERMINAL — root@shivamax:~</div>
+      </div>
+      <div id="terminal-output"></div>
+    </div>
+
+    <div class="hero-btns">
+      <a href="#projects" class="btn-cyber"><span>▶ VIEW PROJECTS</span></a>
+      <a href="#terminal" class="btn-cyber secondary"><span>⌨ OPEN TERMINAL</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ATTACK MAP ═══════════════ -->
+<section id="attack-map">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">// 01</div>
+      <div class="section-label">LIVE THREAT MAP</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="attack-stats reveal">
+      <div class="stat-card">
+        <span class="stat-value red" id="stat-threats">0</span>
+        <div class="stat-label">ACTIVE THREATS</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-blocked">0</span>
+        <div class="stat-label">BLOCKED ATTACKS</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value cyan" id="stat-intrusions">0</span>
+        <div class="stat-label">INTRUSION ATTEMPTS</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-countries">0</span>
+        <div class="stat-label">SOURCE COUNTRIES</div>
+      </div>
+    </div>
+
+    <div class="map-wrap reveal">
+      <div class="attack-tooltip" id="attack-tooltip"></div>
+      <svg id="worldMapSvg" viewBox="0 0 960 500" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <rect width="960" height="500" fill="#000e05"/>
+        <!-- World map paths simplified -->
+        <g id="map-land" fill="#001a0a" stroke="#003311" stroke-width="0.5"></g>
+        <g id="attack-lines"></g>
+        <g id="attack-dots"></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">// 02</div>
+      <div class="section-label">CYBER PROFILE</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="profile-card">
+          <div class="profile-avatar">SS</div>
+          <div class="profile-name">SHIVAM SIYANI</div>
+          <div class="profile-role">CYBERSECURITY & NETWORK SECURITY ENTHUSIAST</div>
+          <div class="profile-info">
+            <div>STATUS: &nbsp;<span>ACTIVE &amp; AVAILABLE</span></div>
+            <div>CLEARANCE: &nbsp;<span>LEVEL 5 - ANALYST</span></div>
+            <div>BASE: &nbsp;<span>AHMEDABAD, INDIA</span></div>
+            <div>SPECIALITY: &nbsp;<span>THREAT DETECTION</span></div>
+            <div>CERT: &nbsp;<span>TryHackMe TOP 5%</span></div>
+            <div>MISSION: &nbsp;<span>SECURING DIGITAL ASSETS</span></div>
+          </div>
         </div>
-    </header>
+      </div>
 
-    <!-- Main Content -->
-    <main class="flex-1 pt-32 pb-24 px-6 max-w-6xl mx-auto w-full relative z-10">
-        
-        <!-- Hero Section -->
-        <section class="max-w-3xl flex flex-col items-start pt-12 md:pt-20">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.02] border border-white/[0.08] mb-8">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-xs text-zinc-300 font-medium">Clearance: TS/SCI Active</span>
+      <div class="reveal">
+        <p style="font-size:0.8rem;color:var(--text-secondary);line-height:2;margin-bottom:24px;">
+          Passionate cybersecurity enthusiast with hands-on experience in SIEM platforms, network security, 
+          and penetration testing. I build real-world home labs to simulate enterprise security environments 
+          and develop automation tools for threat detection and incident response.
+        </p>
+        <div class="skills-grid" id="skills-bars"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PROJECTS ═══════════════ -->
+<section id="projects" style="background:var(--dark-panel);border-top:1px solid var(--glass-border);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">// 03</div>
+      <div class="section-label">PROJECTS</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ TERMINAL ═══════════════ -->
+<section id="terminal">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">// 04</div>
+      <div class="section-label">INTERACTIVE TERMINAL</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="iterm-wrap reveal">
+      <div class="iterm-head">
+        <div class="term-dot r"></div>
+        <div class="term-dot y"></div>
+        <div class="term-dot g"></div>
+        <div class="iterm-title">root@shivamax:~# — type 'help' to begin</div>
+      </div>
+      <div id="iterm-output">
+        <div style="color:var(--neon-cyan);">Welcome to Shivam's Cyber Terminal v2.4.1</div>
+        <div style="color:var(--text-secondary);">Type <span style="color:var(--neon-green);">help</span> to see available commands.</div>
+        <br>
+      </div>
+      <div class="iterm-input-row">
+        <span class="iterm-prompt">root@shivamax:~$</span>
+        <input id="iterm-input" type="text" autocomplete="off" spellcheck="false" placeholder="enter command..." />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ RADAR ═══════════════ -->
+<section id="skills" style="background:var(--dark-panel);border-top:1px solid var(--glass-border);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">// 05</div>
+      <div class="section-label">SKILLS RADAR</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="radar-wrap reveal">
+      <canvas id="radarCanvas" width="380" height="380"></canvas>
+      <div class="radar-legend" id="radar-legend"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SIEM FEED ═══════════════ -->
+<section id="siem">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">// 06</div>
+      <div class="section-label">LIVE SECURITY FEED</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="siem-feed-wrap reveal">
+      <div class="siem-feed-head">
+        <div class="siem-title">WAZUH SIEM — LOG STREAM</div>
+        <div class="siem-live">
+          <div class="status-dot" style="background:var(--neon-red);box-shadow:0 0 6px var(--neon-red);"></div>
+          LIVE
+        </div>
+      </div>
+      <div id="siem-logs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact" style="background:var(--dark-panel);border-top:1px solid var(--glass-border);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-num">// 07</div>
+      <div class="section-label">ESTABLISH CONNECTION</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="contact-info-item">
+          <div class="contact-icon">📡</div>
+          <div>
+            <div class="contact-item-label">EMAIL</div>
+            <div class="contact-item-val">shivamax@protonmail.com</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">🌐</div>
+          <div>
+            <div class="contact-item-label">LOCATION</div>
+            <div class="contact-item-val">Ahmedabad, Gujarat, India</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">🔐</div>
+          <div>
+            <div class="contact-item-label">STATUS</div>
+            <div class="contact-item-val" style="color:var(--neon-green);">Open to Opportunities</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-icon">⚡</div>
+          <div>
+            <div class="contact-item-label">RESPONSE TIME</div>
+            <div class="contact-item-val">&lt; 24 hours</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <form class="cyber-form" onsubmit="submitForm(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">YOUR NAME</label>
+              <input class="form-input" type="text" placeholder="Agent_X" required/>
             </div>
-            
-            <h1 class="text-5xl md:text-7xl font-semibold text-transparent bg-clip-text bg-gradient-to-b from-zinc-100 to-zinc-500 tracking-tight leading-tight mb-6">
-                Securing the <br/><span class="text-zinc-600">digital frontier.</span>
-            </h1>
-            
-            <p class="text-lg text-zinc-400 mb-10 max-w-xl leading-relaxed font-light">
-                Offensive security researcher and penetration tester specializing in web applications, cloud infrastructure, and zero-day vulnerability discovery.
-            </p>
-            
-            <div class="flex flex-wrap items-center gap-4">
-                <button class="bg-zinc-100 text-zinc-950 px-5 py-2.5 rounded-md text-sm font-medium hover:bg-white transition-colors inline-flex items-center gap-2">
-                    View Engagements
-                    <iconify-icon icon="solar:arrow-right-up-linear" class="text-base"></iconify-icon>
-                </button>
-                <button class="bg-transparent text-zinc-300 border border-white/10 px-5 py-2.5 rounded-md text-sm font-medium hover:bg-white/[0.03] transition-colors inline-flex items-center gap-2">
-                    <iconify-icon icon="solar:document-text-linear" class="text-base"></iconify-icon>
-                    Download PGP
-                </button>
+            <div class="form-group">
+              <label class="form-label">YOUR EMAIL</label>
+              <input class="form-input" type="email" placeholder="agent@secure.net" required/>
             </div>
-        </section>
+          </div>
+          <div class="form-group">
+            <label class="form-label">SUBJECT</label>
+            <input class="form-input" type="text" placeholder="Mission Briefing..." required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">MESSAGE</label>
+            <textarea class="form-textarea" placeholder="Transmit your message..." required></textarea>
+          </div>
+          <button type="submit" class="btn-cyber"><span>▶ TRANSMIT MESSAGE</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Bento Grid / Expertise -->
-        <section id="expertise" class="mt-32 grid grid-cols-1 md:grid-cols-3 gap-4">
-            
-            <!-- Terminal/Code Block (Spans 2 columns) -->
-            <div class="md:col-span-2 rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 flex flex-col relative overflow-hidden group hover:border-white/[0.15] transition-colors">
-                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div class="flex items-center gap-3 mb-6 relative z-10">
-                    <iconify-icon icon="solar:code-square-linear" class="text-xl text-zinc-300"></iconify-icon>
-                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight">Vulnerability Research</h2>
-                </div>
-                
-                <div class="flex-1 rounded-lg bg-zinc-950/80 border border-white/[0.05] p-5 font-mono text-xs leading-loose flex flex-col relative z-10 shadow-inner">
-                    <div class="flex gap-2 mb-5">
-                        <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
-                    </div>
-                    <div class="text-zinc-500">> ./run_exploit.sh --target prod --stealth</div>
-                    <div class="text-zinc-400">[*] Initializing payload vectors...</div>
-                    <div class="text-zinc-400">[*] Bypassing WAF ruleset via request smuggling...</div>
-                    <div class="text-emerald-400 mt-2">[+] Access granted. Reverse shell spawned.</div>
-                    <div class="text-zinc-500 mt-auto pt-6 flex items-center gap-2">
-                        root@target:~# <span class="animate-pulse w-1.5 h-3 bg-zinc-400 inline-block"></span>
-                    </div>
-                </div>
-            </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://github.com" target="_blank" class="footer-link">⌥ GITHUB</a>
+    <a href="https://linkedin.com" target="_blank" class="footer-link">⌘ LINKEDIN</a>
+    <a href="https://tryhackme.com" target="_blank" class="footer-link">⊕ TRYHACKME</a>
+    <a href="#" class="footer-link" onclick="alert('Resume download initiated...')">↓ RESUME</a>
+  </div>
+  <div class="footer-copy">
+    &copy; 2025 SHIVAM SIYANI &nbsp;|&nbsp; ALL SYSTEMS SECURE &nbsp;|&nbsp; UNAUTHORIZED ACCESS PROHIBITED
+  </div>
+</footer>
 
-            <!-- Certifications -->
-            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 flex flex-col group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors">
-                <div class="flex items-center gap-3 mb-6">
-                    <iconify-icon icon="solar:diploma-verified-linear" class="text-xl text-zinc-300"></iconify-icon>
-                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight">Certifications</h2>
-                </div>
-                <ul class="space-y-4 text-sm mt-auto font-light">
-                    <li class="flex justify-between items-center border-b border-white/[0.05] pb-3">
-                        <span class="text-zinc-300">OSCP</span>
-                        <span class="text-zinc-500 text-xs">OffSec</span>
-                    </li>
-                    <li class="flex justify-between items-center border-b border-white/[0.05] pb-3">
-                        <span class="text-zinc-300">OSWE</span>
-                        <span class="text-zinc-500 text-xs">OffSec</span>
-                    </li>
-                    <li class="flex justify-between items-center border-b border-white/[0.05] pb-3">
-                        <span class="text-zinc-300">CISSP</span>
-                        <span class="text-zinc-500 text-xs">ISC²</span>
-                    </li>
-                    <li class="flex justify-between items-center pb-1">
-                        <span class="text-zinc-300">CISM</span>
-                        <span class="text-zinc-500 text-xs">ISACA</span>
-                    </li>
-                </ul>
-            </div>
+<script>
+/* ═══ DATA ═══ */
+const SKILLS = [
+  {name:'SIEM (Wazuh)',pct:88},
+  {name:'Network Security',pct:85},
+  {name:'Penetration Testing',pct:80},
+  {name:'Python Automation',pct:82},
+  {name:'Linux',pct:90},
+  {name:'Threat Analysis',pct:86},
+  {name:'Wireshark',pct:78},
+  {name:'Nmap / Recon',pct:84},
+];
 
-            <!-- Threat Modeling -->
-            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors flex flex-col justify-between">
-                <div>
-                    <div class="w-10 h-10 rounded-full bg-white/[0.03] flex items-center justify-center mb-6 border border-white/[0.05]">
-                        <iconify-icon icon="solar:shield-warning-linear" class="text-xl text-zinc-300"></iconify-icon>
-                    </div>
-                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight mb-3">Threat Modeling</h2>
-                    <p class="text-sm text-zinc-400 leading-relaxed font-light">
-                        Architecting secure systems by identifying vulnerabilities during the design phase using STRIDE methodologies.
-                    </p>
-                </div>
-            </div>
+const PROJECTS = [
+  {type:'HOME LAB',title:'Wazuh SIEM Home Lab',desc:'Built a full SIEM environment using Wazuh to monitor, detect, and respond to security events. Configured rules, dashboards, and active response scripts.',tags:['Wazuh','SIEM','ELK Stack','Ubuntu'],github:'https://github.com',demo:'#'},
+  {type:'HARDWARE LAB',title:'Raspberry Pi Pen Test Lab',desc:'Deployed a Raspberry Pi as a portable penetration testing platform running Kali Linux. Used for wireless auditing, network scanning, and exploit testing.',tags:['Kali Linux','RPi','WiFi Audit','Metasploit'],github:'https://github.com',demo:'#'},
+  {type:'PYTHON PROJECT',title:'Network Security System',desc:'Custom Python-based IDS that monitors network traffic, detects anomalies, and triggers alerts via Slack. Integrates with Wazuh for centralized log management.',tags:['Python','Scapy','IDS','Slack API'],github:'https://github.com',demo:'#'},
+  {type:'AUTOMATION',title:'Threat Detection Pipeline',desc:'Automated threat hunting pipeline that correlates logs from multiple sources, applies MITRE ATT&CK framework mapping, and generates incident reports.',tags:['MITRE ATT&CK','Python','Automation','Reporting'],github:'https://github.com',demo:'#'},
+];
 
-            <!-- Red Teaming -->
-            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors flex flex-col justify-between">
-                <div>
-                    <div class="w-10 h-10 rounded-full bg-white/[0.03] flex items-center justify-center mb-6 border border-white/[0.05]">
-                        <iconify-icon icon="solar:ghost-linear" class="text-xl text-zinc-300"></iconify-icon>
-                    </div>
-                    <h2 class="text-xl font-medium text-zinc-100 tracking-tight mb-3">Red Teaming</h2>
-                    <p class="text-sm text-zinc-400 leading-relaxed font-light">
-                        Full-scope adversarial simulations to test detection and response capabilities against advanced persistent threats.
-                    </p>
-                </div>
-            </div>
+const RADAR_SKILLS = [
+  {name:'Network Security',val:85,color:'#00ff41'},
+  {name:'Threat Analysis',val:88,color:'#00ff41'},
+  {name:'Penetration Testing',val:80,color:'#00f5ff'},
+  {name:'Python / Automation',val:82,color:'#00f5ff'},
+  {name:'SIEM & Log Analysis',val:90,color:'#ff6600'},
+  {name:'Linux Administration',val:90,color:'#ff6600'},
+];
 
-            <!-- Custom Interactive Element: Risk Slider -->
-            <div class="rounded-2xl border border-white/[0.08] bg-zinc-900/40 p-6 flex flex-col group hover:bg-zinc-900/60 hover:border-white/[0.15] transition-colors">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center gap-3">
-                        <iconify-icon icon="solar:tuning-square-2-linear" class="text-xl text-zinc-300"></iconify-icon>
-                        <h2 class="text-xl font-medium text-zinc-100 tracking-tight">Audit Scope</h2>
-                    </div>
-                    <span class="text-xs font-mono text-emerald-400">Deep</span>
-                </div>
-                
-                <p class="text-sm text-zinc-400 leading-relaxed font-light mb-8">
-                    Adjusting simulation depth constraints for internal penetration testing frameworks.
-                </p>
+const SIEM_LOGS = [
+  {level:'INFO',msg:'User authentication successful',ip:'192.168.1.45'},
+  {level:'WARN',msg:'Multiple failed login attempts detected',ip:'203.0.113.42'},
+  {level:'ALERT',msg:'Suspicious outbound connection blocked',ip:'198.51.100.8'},
+  {level:'INFO',msg:'Port scan completed — 0 vulns found',ip:'10.0.0.1'},
+  {level:'CRITICAL',msg:'SQL injection attempt detected & blocked',ip:'185.220.101.33'},
+  {level:'ALERT',msg:'Brute force attack in progress',ip:'45.33.32.156'},
+  {level:'INFO',msg:'Firewall rules updated successfully',ip:'10.0.0.1'},
+  {level:'WARN',msg:'Unusual outbound traffic volume',ip:'192.168.1.102'},
+  {level:'ALERT',msg:'Malicious payload detected in request',ip:'104.21.55.72'},
+  {level:'INFO',msg:'IDS signature update completed',ip:'10.0.0.254'},
+  {level:'CRITICAL',msg:'Intrusion attempt prevented — CVE-2024-1234',ip:'91.108.4.33'},
+  {level:'WARN',msg:'Port 22 scan from external host',ip:'172.16.254.1'},
+  {level:'INFO',msg:'SSL certificate renewed successfully',ip:'10.0.0.1'},
+  {level:'ALERT',msg:'Phishing URL blocked in email filter',ip:'192.0.2.88'},
+  {level:'WARN',msg:'Unauthorized device connected to network',ip:'192.168.1.199'},
+];
 
-                <div class="mt-auto relative w-full h-1.5 bg-zinc-800 rounded-full">
-                    <div class="absolute top-0 left-0 h-1.5 bg-emerald-500/80 rounded-full w-[85%]"></div>
-                    <input type="range" min="1" max="100" value="85" class="absolute top-1/2 -translate-y-1/2 w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-zinc-100 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-zinc-900 [&::-webkit-slider-thumb]:shadow-sm"/>
-                </div>
-                <div class="flex justify-between items-center mt-3 text-xs text-zinc-500 font-medium">
-                    <span>Surface</span>
-                    <span>Comprehensive</span>
-                </div>
-            </div>
+const ATTACK_SOURCES = [
+  {name:'Russia',x:600,y:120},{name:'China',x:720,y:165},{name:'USA',x:165,y:175},
+  {name:'Brazil',x:265,y:315},{name:'Germany',x:485,y:130},{name:'Iran',x:600,y:195},
+  {name:'North Korea',x:745,y:165},{name:'Netherlands',x:475,y:125},{name:'India',x:660,y:215},
+  {name:'Ukraine',x:555,y:130},
+];
 
-        </section>
+const ATTACK_TARGET = {x:660,y:215}; // India/Ahmedabad
 
-        <!-- Advisories List -->
-        <section id="advisories" class="mt-32">
-            <h2 class="text-2xl font-medium text-zinc-100 tracking-tight mb-8">Recent Advisories</h2>
-            <div class="flex flex-col border-t border-white/[0.08]">
-                
-                <!-- Item 1 -->
-                <a href="#" class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors -mx-6 px-6">
-                    <div class="flex items-start md:items-center gap-4 md:gap-8 mb-4 md:mb-0 flex-col md:flex-row">
-                        <span class="text-sm font-mono text-emerald-400 w-32">CVE-2023-8472</span>
-                        <div>
-                            <h3 class="text-base text-zinc-200 font-medium mb-1 group-hover:text-zinc-100 transition-colors">Auth Bypass in Enterprise Gateway</h3>
-                            <p class="text-sm text-zinc-500 font-light">Unauthenticated RCE via SAML assertion manipulation.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 font-medium">Critical</span>
-                        <iconify-icon icon="solar:arrow-right-linear" class="text-zinc-600 group-hover:text-zinc-300 transition-colors text-lg"></iconify-icon>
-                    </div>
-                </a>
+/* ═══ LOADER ═══ */
+const loaderMsgs = [
+  'Initializing security systems...',
+  'Loading threat intelligence...',
+  'Establishing secure connection...',
+  'Calibrating IDS sensors...',
+  'Syncing SIEM database...',
+  'Deploying firewall rules...',
+  'Starting network monitor...',
+  'Systems online. Welcome.',
+];
 
-                <!-- Item 2 -->
-                <a href="#" class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors -mx-6 px-6">
-                    <div class="flex items-start md:items-center gap-4 md:gap-8 mb-4 md:mb-0 flex-col md:flex-row">
-                        <span class="text-sm font-mono text-emerald-400 w-32">CVE-2023-4109</span>
-                        <div>
-                            <h3 class="text-base text-zinc-200 font-medium mb-1 group-hover:text-zinc-100 transition-colors">Privilege Escalation in CloudAgent</h3>
-                            <p class="text-sm text-zinc-500 font-light">Local privilege escalation via insecure named pipe configuration.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 font-medium">High</span>
-                        <iconify-icon icon="solar:arrow-right-linear" class="text-zinc-600 group-hover:text-zinc-300 transition-colors text-lg"></iconify-icon>
-                    </div>
-                </a>
+let loaderPct = 0;
+const loaderBar = document.getElementById('loader-bar');
+const loaderText = document.getElementById('loader-text');
+const loaderPctEl = document.getElementById('loader-pct');
 
-                <!-- Item 3 -->
-                <a href="#" class="group flex flex-col md:flex-row md:items-center justify-between py-6 border-b border-white/[0.08] hover:bg-white/[0.02] transition-colors -mx-6 px-6">
-                    <div class="flex items-start md:items-center gap-4 md:gap-8 mb-4 md:mb-0 flex-col md:flex-row">
-                        <span class="text-sm font-mono text-emerald-400 w-32">CVE-2022-1984</span>
-                        <div>
-                            <h3 class="text-base text-zinc-200 font-medium mb-1 group-hover:text-zinc-100 transition-colors">SSRF in Analytics Engine</h3>
-                            <p class="text-sm text-zinc-500 font-light">Server-Side Request Forgery allowing internal network pivoting.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <span class="text-xs px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 font-medium">Medium</span>
-                        <iconify-icon icon="solar:arrow-right-linear" class="text-zinc-600 group-hover:text-zinc-300 transition-colors text-lg"></iconify-icon>
-                    </div>
-                </a>
+function runLoader() {
+  let i = 0;
+  const interval = setInterval(() => {
+    loaderPct += Math.random() * 15 + 5;
+    if(loaderPct > 100) loaderPct = 100;
+    loaderBar.style.width = loaderPct + '%';
+    loaderPctEl.textContent = Math.floor(loaderPct) + '%';
+    if(i < loaderMsgs.length) { loaderText.textContent = loaderMsgs[i]; i++; }
+    if(loaderPct >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('loader').style.transition = 'opacity 0.6s';
+        document.getElementById('loader').style.opacity = '0';
+        setTimeout(() => { document.getElementById('loader').style.display = 'none'; init(); }, 600);
+      }, 400);
+    }
+  }, 200);
+}
 
-            </div>
-        </section>
+/* ═══ MATRIX ═══ */
+function initMatrix() {
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const cols = Math.floor(canvas.width / 16);
+  const drops = Array(cols).fill(1);
+  const chars = '01アイウエオカキクケコサシスセソ$#@%&';
 
-        <!-- Footer -->
-        <footer class="mt-32 border-t border-white/[0.08] pt-8 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
-            
-            <div class="flex items-center gap-4">
-                <div class="w-8 h-8 rounded-full bg-white/[0.03] flex items-center justify-center border border-white/[0.08]">
-                    <iconify-icon icon="solar:shield-keyhole-linear" class="text-sm text-zinc-400"></iconify-icon>
-                </div>
-                <div class="text-xs text-zinc-500 font-medium">
-                    &copy; 2024 ALEX.SEC. All systems nominal.
-                </div>
-            </div>
+  setInterval(() => {
+    ctx.fillStyle = 'rgba(0,0,0,0.05)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = '#00ff41';
+    ctx.font = '14px monospace';
+    drops.forEach((y,i) => {
+      const ch = chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillText(ch, i*16, y*16);
+      if(y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    });
+  }, 50);
 
-            <!-- Custom Dropdown -->
-            <div class="relative group">
-                <button class="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-300 transition-colors font-medium">
-                    <iconify-icon icon="solar:global-linear" class="text-sm"></iconify-icon>
-                    Region: Global (EN)
-                    <iconify-icon icon="solar:alt-arrow-down-linear" class="text-sm"></iconify-icon>
-                </button>
-                <div class="absolute bottom-full mb-2 right-0 w-36 bg-zinc-900/90 backdrop-blur-md border border-white/10 rounded-lg p-1.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl">
-                    <a href="#" class="block px-3 py-2 text-xs text-zinc-300 bg-white/5 rounded-md transition-colors font-medium">Global (EN)</a>
-                    <a href="#" class="block px-3 py-2 text-xs text-zinc-500 hover:text-zinc-300 hover:bg-white/5 rounded-md transition-colors font-medium">Europe (EN)</a>
-                    <a href="#" class="block px-3 py-2 text-xs text-zinc-500 hover:text-zinc-300 hover:bg-white/5 rounded-md transition-colors font-medium">APAC (EN)</a>
-                </div>
-            </div>
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+}
 
-            <div class="flex items-center gap-6">
-                <a href="#" aria-label="Github Profile" class="text-zinc-500 hover:text-zinc-100 transition-colors">
-                    <iconify-icon icon="solar:programming-linear" class="text-xl"></iconify-icon>
-                </a>
-                <a href="#" aria-label="Contact Email" class="text-zinc-500 hover:text-zinc-100 transition-colors">
-                    <iconify-icon icon="solar:letter-linear" class="text-xl"></iconify-icon>
-                </a>
-            </div>
-        </footer>
+/* ═══ HUD TIME ═══ */
+function updateHudTime() {
+  const el = document.getElementById('hud-time');
+  const now = new Date();
+  const t = now.toTimeString().split(' ')[0];
+  if(el) el.innerHTML = `SYS TIME: ${t}<br>UPTIME: 99.97%<br>STATUS: SECURE`;
+}
 
-    </main>
+/* ═══ HERO TERMINAL ═══ */
+const termLines = [
+  {cmd:'nmap -sV 192.168.1.0/24',result:'Scanning 256 hosts... 12 active hosts found'},
+  {cmd:'python3 ids_monitor.py --live',result:'[IDS] Monitoring active. Watching 4 interfaces...'},
+  {cmd:'wazuh-manager --analyze-logs',result:'[SIEM] 2,847 events processed. 3 critical alerts.'},
+  {cmd:'tcpdump -i eth0 -n port 80',result:'Capturing packets... 0 suspicious patterns detected'},
+  {cmd:'./threat_hunt.py --mitre-map',result:'ATT&CK mapping complete. 0 confirmed TTPs active.'},
+  {cmd:'ssh -i id_rsa admin@10.0.0.1',result:'Connected. Welcome to FIREWALL-01 [SECURE]'},
+];
+
+let termIdx = 0;
+let termPhase = 0;
+let termCharIdx = 0;
+let termEl = document.getElementById('terminal-output');
+
+function typeTermLine() {
+  const line = termLines[termIdx % termLines.length];
+  if(termPhase === 0) {
+    // type command
+    const partial = line.cmd.substring(0, termCharIdx);
+    termEl.innerHTML = `<div class="term-line"><span class="term-prompt">root@shivamax:~$</span> <span class="term-cmd">${partial}</span><span class="term-cursor"></span></div>`;
+    termCharIdx++;
+    if(termCharIdx > line.cmd.length) { termPhase = 1; termCharIdx = 0; setTimeout(typeTermLine, 500); return; }
+    setTimeout(typeTermLine, 60 + Math.random()*40);
+  } else {
+    // show result, pause, then next
+    termEl.innerHTML = `<div class="term-line"><span class="term-prompt">root@shivamax:~$</span> <span class="term-cmd">${line.cmd}</span></div><div class="term-result">${line.result}</div><div class="term-line"><span class="term-cursor"></span></div>`;
+    termPhase = 0; termIdx++;
+    setTimeout(typeTermLine, 2500);
+  }
+}
+
+/* ═══ SKILLS BARS ═══ */
+function renderSkillBars() {
+  const el = document.getElementById('skills-bars');
+  el.innerHTML = SKILLS.map(s => `
+    <div class="skill-bar-wrap">
+      <div class="skill-name">${s.name}<span class="skill-pct">${s.pct}%</span></div>
+      <div class="skill-bar-bg"><div class="skill-bar-fill" data-pct="${s.pct}"></div></div>
+    </div>
+  `).join('');
+}
+
+function animateBars() {
+  document.querySelectorAll('.skill-bar-fill').forEach(b => {
+    b.style.width = b.dataset.pct + '%';
+  });
+}
+
+/* ═══ PROJECTS ═══ */
+function renderProjects() {
+  const el = document.getElementById('projects-grid');
+  el.innerHTML = PROJECTS.map(p => `
+    <div class="project-card reveal">
+      <div class="project-type">${p.type}</div>
+      <div class="project-title">${p.title}</div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="project-btns">
+        <a href="${p.github}" target="_blank" class="btn-sm green">⌥ GITHUB</a>
+        <a href="${p.demo}" class="btn-sm cyan">▶ DEMO</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ═══ TERMINAL COMMANDS ═══ */
+const CMD = {
+  help: () => `<div style="color:var(--neon-cyan)">Available commands:</div>
+<div style="color:var(--text-secondary)">  whoami &nbsp;&nbsp;&nbsp; — display profile info</div>
+<div style="color:var(--text-secondary)">  skills &nbsp;&nbsp;&nbsp; — list technical skills</div>
+<div style="color:var(--text-secondary)">  projects &nbsp; — view all projects</div>
+<div style="color:var(--text-secondary)">  contact &nbsp;&nbsp; — contact information</div>
+<div style="color:var(--text-secondary)">  status &nbsp;&nbsp;&nbsp; — system status</div>
+<div style="color:var(--text-secondary)">  hack &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; — try something fun</div>
+<div style="color:var(--text-secondary)">  clear &nbsp;&nbsp;&nbsp;&nbsp; — clear terminal</div>`,
+  whoami: () => `<div style="color:var(--neon-green)">Name: Shivam Siyani</div>
+<div>Role: Cybersecurity & Network Security Enthusiast</div>
+<div>Base: Ahmedabad, India</div>
+<div>Clearance: Level 5 Analyst</div>
+<div>Focus: SIEM, Threat Detection, Pen Testing</div>`,
+  skills: () => `<div style="color:var(--neon-cyan)">Technical Arsenal:</div>` + SKILLS.map(s=>`<div><span style="color:var(--neon-green)">[${s.pct}%]</span> ${s.name}</div>`).join(''),
+  projects: () => `<div style="color:var(--neon-cyan)">Active Projects:</div>` + PROJECTS.map((p,i)=>`<div><span style="color:var(--neon-green)">[${i+1}]</span> ${p.title}</div>`).join(''),
+  contact: () => `<div style="color:var(--neon-cyan)">Contact Channels:</div>
+<div>Email: &nbsp; shivamax@protonmail.com</div>
+<div>GitHub: &nbsp;github.com/shivamax</div>
+<div>LinkedIn: linkedin.com/in/shivamax</div>
+<div>THM: &nbsp;&nbsp;&nbsp; tryhackme.com/p/shivamax</div>`,
+  status: () => `<div style="color:var(--neon-green)">ALL SYSTEMS OPERATIONAL</div>
+<div>IDS: <span style="color:var(--neon-green)">ACTIVE</span></div>
+<div>Firewall: <span style="color:var(--neon-green)">ENABLED</span></div>
+<div>SIEM: <span style="color:var(--neon-green)">MONITORING</span></div>
+<div>VPN: <span style="color:var(--neon-green)">CONNECTED</span></div>`,
+  hack: () => `<div style="color:var(--neon-red)">Initiating hack sequence...</div>
+<div>Scanning target...</div>
+<div>Exploiting CVE-2024-0000...</div>
+<div style="color:var(--neon-green)">Just kidding. Ethical hackers only. 😄</div>`,
+  clear: () => '__CLEAR__',
+};
+
+function handleCmd(input, outputEl) {
+  const cmd = input.trim().toLowerCase();
+  const res = CMD[cmd] ? CMD[cmd]() : `<span style="color:var(--neon-red)">command not found: ${cmd}. Type 'help' for commands.</span>`;
+  if(res === '__CLEAR__') { outputEl.innerHTML = ''; return; }
+  const line = document.createElement('div');
+  line.innerHTML = `<div><span style="color:var(--neon-cyan)">root@shivamax:~$</span> <span style="color:var(--text-primary)">${cmd}</span></div><div style="margin-left:16px;margin-bottom:8px;">${res}</div>`;
+  outputEl.appendChild(line);
+  outputEl.scrollTop = outputEl.scrollHeight;
+}
+
+function setupTerminal(inputId, outputId) {
+  const inp = document.getElementById(inputId);
+  const out = document.getElementById(outputId);
+  if(!inp || !out) return;
+  inp.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && inp.value.trim()) {
+      handleCmd(inp.value, out);
+      inp.value = '';
+    }
+  });
+}
+
+/* ═══ RADAR ═══ */
+function drawRadar() {
+  const canvas = document.getElementById('radarCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width/2, cy = canvas.height/2;
+  const r = Math.min(cx,cy) - 30;
+  const N = RADAR_SKILLS.length;
+  let angle = 0;
+
+  function hexToRgba(hex, a) {
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Grid circles
+  [0.2,0.4,0.6,0.8,1].forEach(pct => {
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0,255,65,0.1)';
+    ctx.lineWidth = 0.5;
+    for(let i=0;i<N;i++) {
+      const a = (Math.PI*2/N)*i - Math.PI/2;
+      const x = cx + Math.cos(a)*r*pct;
+      const y = cy + Math.sin(a)*r*pct;
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.stroke();
+  });
+
+  // Axis lines
+  for(let i=0;i<N;i++) {
+    const a = (Math.PI*2/N)*i - Math.PI/2;
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0,255,65,0.15)';
+    ctx.lineWidth = 0.5;
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r);
+    ctx.stroke();
+  }
+
+  // Radar sweep animation
+  let sweep = 0;
+  function animateSweep() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Re-draw grid
+    [0.2,0.4,0.6,0.8,1].forEach(pct => {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(0,255,65,0.1)';
+      ctx.lineWidth = 0.5;
+      for(let i=0;i<N;i++) {
+        const a = (Math.PI*2/N)*i - Math.PI/2;
+        const x = cx + Math.cos(a)*r*pct;
+        const y = cy + Math.sin(a)*r*pct;
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    });
+    for(let i=0;i<N;i++) {
+      const a = (Math.PI*2/N)*i - Math.PI/2;
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(0,255,65,0.15)';
+      ctx.lineWidth = 0.5;
+      ctx.moveTo(cx,cy);
+      ctx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r);
+      ctx.stroke();
+    }
+
+    // Skill polygon
+    ctx.beginPath();
+    RADAR_SKILLS.forEach((s,i) => {
+      const a = (Math.PI*2/N)*i - Math.PI/2;
+      const sr = r*(s.val/100);
+      const x = cx + Math.cos(a)*sr;
+      const y = cy + Math.sin(a)*sr;
+      i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(0,255,65,0.08)';
+    ctx.fill();
+    ctx.strokeStyle = '#00ff41';
+    ctx.lineWidth = 1.5;
+    ctx.shadowColor = '#00ff41';
+    ctx.shadowBlur = 8;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Dots
+    RADAR_SKILLS.forEach((s,i) => {
+      const a = (Math.PI*2/N)*i - Math.PI/2;
+      const sr = r*(s.val/100);
+      ctx.beginPath();
+      ctx.arc(cx+Math.cos(a)*sr, cy+Math.sin(a)*sr, 4, 0, Math.PI*2);
+      ctx.fillStyle = s.color;
+      ctx.shadowColor = s.color;
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    // Labels
+    RADAR_SKILLS.forEach((s,i) => {
+      const a = (Math.PI*2/N)*i - Math.PI/2;
+      const lx = cx + Math.cos(a)*(r+20);
+      const ly = cy + Math.sin(a)*(r+20);
+      ctx.font = '10px "Share Tech Mono"';
+      ctx.fillStyle = '#4daa66';
+      ctx.textAlign = lx > cx+5 ? 'left' : lx < cx-5 ? 'right' : 'center';
+      ctx.textBaseline = ly > cy+5 ? 'top' : ly < cy-5 ? 'bottom' : 'middle';
+      ctx.fillText(s.name.split(' ')[0].toUpperCase(), lx, ly);
+    });
+
+    // Sweep
+    sweep += 0.015;
+    const grad = ctx.createConicalGradient ? null : null;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,sweep-0.4,sweep);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(0,255,65,0.06)';
+    ctx.fill();
+
+    // Sweep line
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(sweep)*r, cy+Math.sin(sweep)*r);
+    ctx.strokeStyle = 'rgba(0,255,65,0.6)';
+    ctx.lineWidth = 1;
+    ctx.shadowColor = '#00ff41';
+    ctx.shadowBlur = 5;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(animateSweep);
+  }
+  animateSweep();
+
+  // Legend
+  const legend = document.getElementById('radar-legend');
+  if(legend) {
+    legend.innerHTML = RADAR_SKILLS.map(s => `
+      <div class="radar-item">
+        <div class="radar-dot" style="background:${s.color};box-shadow:0 0 8px ${s.color}"></div>
+        <div class="radar-skill">${s.name}</div>
+        <div class="radar-pct" style="color:${s.color}">${s.val}%</div>
+      </div>
+    `).join('');
+  }
+}
+
+/* ═══ SIEM FEED ═══ */
+let siemIdx = 0;
+function addSiemLog() {
+  const logs = document.getElementById('siem-logs');
+  if(!logs) return;
+  const l = SIEM_LOGS[siemIdx % SIEM_LOGS.length];
+  siemIdx++;
+  const now = new Date();
+  const t = now.toTimeString().split(' ')[0];
+  const cls = {INFO:'info',WARN:'warn',ALERT:'alert',CRITICAL:'crit'}[l.level] || 'info';
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = `<span class="log-time">${t}</span><span class="log-level ${cls}">[${l.level}]</span><span class="log-msg">${l.msg}</span><span class="log-ip">${l.ip}</span>`;
+  logs.appendChild(line);
+  // Keep only last 12
+  while(logs.children.length > 12) logs.removeChild(logs.children[0]);
+}
+
+/* ═══ ATTACK MAP ═══ */
+let threats = 0, blocked = 0, intrusions = 0, countries = new Set();
+
+function drawWorldMap() {
+  // Simplified land masses as paths
+  const land = document.getElementById('map-land');
+  const continents = [
+    // North America
+    'M 120 100 L 200 85 L 240 120 L 220 170 L 195 200 L 160 210 L 130 195 L 110 155 Z',
+    // South America
+    'M 210 240 L 260 225 L 290 270 L 280 340 L 250 370 L 220 340 L 200 290 Z',
+    // Europe
+    'M 450 90 L 510 80 L 530 110 L 500 135 L 460 140 L 445 115 Z',
+    // Africa
+    'M 460 180 L 530 165 L 555 220 L 540 310 L 495 345 L 455 310 L 445 240 Z',
+    // Asia
+    'M 530 80 L 720 70 L 780 120 L 760 190 L 680 220 L 610 200 L 560 160 L 530 130 Z',
+    // Australia
+    'M 720 300 L 800 285 L 820 330 L 790 365 L 735 360 L 710 330 Z',
+    // UK
+    'M 450 110 L 462 105 L 464 120 L 452 125 Z',
+  ];
+  land.innerHTML = continents.map(d=>`<path d="${d}"/>`).join('');
+}
+
+function launchAttack() {
+  const src = ATTACK_SOURCES[Math.floor(Math.random()*ATTACK_SOURCES.length)];
+  const svg = document.getElementById('worldMapSvg');
+  const lines = document.getElementById('attack-lines');
+  const dots = document.getElementById('attack-dots');
+
+  countries.add(src.name);
+  const isBlocked = Math.random() > 0.3;
+  isBlocked ? blocked++ : threats++;
+  intrusions += Math.random() > 0.5 ? 1 : 0;
+
+  document.getElementById('stat-threats').textContent = threats;
+  document.getElementById('stat-blocked').textContent = blocked;
+  document.getElementById('stat-intrusions').textContent = intrusions;
+  document.getElementById('stat-countries').textContent = countries.size;
+
+  const color = isBlocked ? '#00ff41' : '#ff0040';
+
+  // Attack line
+  const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',src.x); line.setAttribute('y1',src.y);
+  line.setAttribute('x2',ATTACK_TARGET.x); line.setAttribute('y2',ATTACK_TARGET.y);
+  line.setAttribute('stroke',color); line.setAttribute('stroke-width','0.8');
+  line.setAttribute('stroke-dasharray','4 3'); line.setAttribute('opacity','0.6');
+  lines.appendChild(line);
+
+  // Source dot
+  const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dot.setAttribute('cx',src.x); dot.setAttribute('cy',src.y);
+  dot.setAttribute('r','3'); dot.setAttribute('fill',color);
+  dot.setAttribute('filter','url(#glow)');
+  dots.appendChild(dot);
+
+  // Ripple at target
+  const ripple = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  ripple.setAttribute('cx',ATTACK_TARGET.x); ripple.setAttribute('cy',ATTACK_TARGET.y);
+  ripple.setAttribute('r','3'); ripple.setAttribute('fill','none');
+  ripple.setAttribute('stroke',color); ripple.setAttribute('stroke-width','1');
+  ripple.setAttribute('opacity','0.8');
+  dots.appendChild(ripple);
+
+  // Animate ripple
+  let ripR = 3, ripO = 0.8;
+  const ripAnim = setInterval(() => {
+    ripR += 1.5; ripO -= 0.06;
+    ripple.setAttribute('r', ripR);
+    ripple.setAttribute('opacity', Math.max(0,ripO));
+    if(ripO <= 0) { clearInterval(ripAnim); ripple.remove(); }
+  }, 40);
+
+  // Remove line after a bit
+  setTimeout(() => { line.remove(); dot.remove(); }, 3000);
+}
+
+/* ═══ STATS COUNTER ═══ */
+function countUp(el, target, duration) {
+  let start = 0;
+  const step = target / (duration/50);
+  const t = setInterval(() => {
+    start += step;
+    if(start >= target) { el.textContent = target; clearInterval(t); return; }
+    el.textContent = Math.floor(start);
+  }, 50);
+}
+
+/* ═══ SCROLL REVEAL ═══ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.classList.add('visible');
+      if(e.target.id === 'about' || e.target.closest('#about')) animateBars();
+    }
+  });
+}, {threshold: 0.1});
+
+/* ═══ KEYBOARD SHORTCUT ═══ */
+document.addEventListener('keydown', e => {
+  if((e.ctrlKey || e.metaKey) && e.key === '`') {
+    e.preventDefault();
+    openTermModal();
+  }
+  if(e.key === 'Escape') closeTermModal();
+});
+
+function openTermModal() {
+  document.getElementById('term-modal').classList.add('open');
+  document.getElementById('modal-input').focus();
+}
+
+function closeTermModal() {
+  document.getElementById('term-modal').classList.remove('open');
+}
+
+/* ═══ FORM ═══ */
+function submitForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.innerHTML = '<span>✓ MESSAGE TRANSMITTED</span>';
+  btn.style.borderColor = '#00ff41';
+  btn.style.background = 'rgba(0,255,65,0.1)';
+  setTimeout(() => { btn.innerHTML = '<span>▶ TRANSMIT MESSAGE</span>'; btn.style.background=''; btn.style.borderColor=''; e.target.reset(); }, 3000);
+}
+
+/* ═══ INIT ═══ */
+function init() {
+  initMatrix();
+  typeTermLine();
+  renderSkillBars();
+  renderProjects();
+  drawWorldMap();
+  drawRadar();
+  setupTerminal('iterm-input', 'iterm-output');
+  setupTerminal('modal-input', 'modal-output');
+
+  // Reveal observers
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Skill bars trigger
+  const aboutSection = document.getElementById('about');
+  const barObserver = new IntersectionObserver(entries => {
+    if(entries[0].isIntersecting) { animateBars(); barObserver.disconnect(); }
+  }, {threshold:0.3});
+  if(aboutSection) barObserver.observe(aboutSection);
+
+  // HUD time
+  updateHudTime();
+  setInterval(updateHudTime, 1000);
+
+  // Attack simulation
+  let attackCount = 0;
+  function scheduleAttack() {
+    launchAttack();
+    attackCount++;
+    setTimeout(scheduleAttack, 800 + Math.random()*1200);
+  }
+  setTimeout(scheduleAttack, 1000);
+
+  // SIEM feed
+  setInterval(addSiemLog, 1500);
+  for(let i=0;i<6;i++) setTimeout(addSiemLog, i*200);
+
+  // Counters on load
+  setTimeout(() => {
+    countUp(document.getElementById('stat-blocked'), 2847, 2000);
+  }, 500);
+
+  // Hide key hint after a while
+  setTimeout(() => {
+    const h = document.getElementById('key-hint');
+    if(h) { h.style.opacity='0'; setTimeout(()=>h.remove(),500); }
+  }, 8000);
+}
+
+// Start loader
+window.addEventListener('load', runLoader);
+</script>
 </body>
 </html>
